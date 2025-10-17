@@ -484,6 +484,58 @@ The server will start on http://localhost:3000. Open this URL in your browser.
 
 ---
 
+## Deployment to Render.com
+
+### Step 15: Prepare for Deployment
+
+Ensure your `.gitignore` file includes:
+
+```
+node_modules/
+.env
+.DS_Store
+```
+
+### Step 16: Push to GitHub
+
+Initialize git repository and push to GitHub:
+
+```bash
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin https://github.com/yourusername/todo-list.git
+git push -u origin main
+```
+
+### Step 17: Deploy to Render
+
+1. Go to https://render.com and sign in with GitHub
+2. Click "New +" and select "Web Service"
+3. Connect your GitHub repository
+4. Configure the service:
+   - **Name:** todo-list (or your preferred name)
+   - **Environment:** Node
+   - **Build Command:** `npm install`
+   - **Start Command:** `npm start`
+5. Click "Advanced" and add Environment Variable:
+   - **Key:** `MONGODB_URI`
+   - **Value:** Your MongoDB Atlas connection string
+6. Click "Create Web Service"
+
+Render will automatically deploy your application. Once deployed, you'll receive a URL like: `https://your-app-name.onrender.com`
+
+### Step 18: Verify Deployment
+
+1. Open your Render URL in a browser
+2. Test all features (add, complete, delete tasks)
+3. Verify data persists across page refreshes
+
+Note: Free tier on Render may spin down after inactivity. The first request after inactivity may take 30-60 seconds to load.
+
+---
+
 ## Project Structure
 
 ```
