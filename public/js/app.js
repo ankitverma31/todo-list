@@ -1,5 +1,5 @@
-// API endpoint
-const API_URL = 'http://localhost:3000/api/tasks';
+// API endpoint (works both locally and when deployed)
+const API_URL = '/api/tasks';
 
 // Get DOM elements
 const addTaskForm = document.getElementById('addTaskForm');
@@ -24,27 +24,16 @@ async function fetchTasks() {
 
 // Display tasks
 function displayTasks(tasks) {
-  // Clear current list
   taskList.innerHTML = '';
   
-  // Show empty state if no tasks
   if (tasks.length === 0) {
-    taskList.innerHTML = `
-      <div class="empty-state">
-        <i class="bi bi-clipboard-x"></i>
-        <h5>No tasks yet</h5>
-        <p>Add your first task above to get started!</p>
-      </div>
-    `;
     updateStats(0, 0);
     return;
   }
   
-  // Count completed tasks
   const completedCount = tasks.filter(task => task.completed).length;
   updateStats(tasks.length, completedCount);
   
-  // Create task items
   tasks.forEach(task => {
     const taskItem = createTaskElement(task);
     taskList.appendChild(taskItem);
@@ -54,22 +43,29 @@ function displayTasks(tasks) {
 // Create task element
 function createTaskElement(task) {
   const taskDiv = document.createElement('div');
-  taskDiv.className = `task-item ${task.completed ? 'completed' : ''}`;
+  taskDiv.className = 'list-group-item d-flex align-items-center';
   
-  taskDiv.innerHTML = `
-    <div class="form-check">
-      <input 
-        class="form-check-input" 
-        type="checkbox" 
-        ${task.completed ? 'checked' : ''} 
-        onchange="toggleTask('${task._id}')"
-      >
-    </div>
-    <div class="task-title">${escapeHtml(task.title)}</div>
-    <button class="btn btn-danger btn-sm" onclick="deleteTask('${task._id}')">
-      <i class="bi bi-trash"></i>
-    </button>
-  `;
+  const checkbox = document.createElement('input');
+  checkbox.type = 'checkbox';
+  checkbox.className = 'form-check-input me-3';
+  checkbox.checked = task.completed;
+  checkbox.onclick = () => toggleTask(task._id);
+  
+  const taskText = document.createElement('span');
+  taskText.className = 'flex-grow-1';
+  taskText.textContent = task.title;
+  if (task.completed) {
+    taskText.classList.add('text-decoration-line-through', 'text-muted');
+  }
+  
+  const deleteBtn = document.createElement('button');
+  deleteBtn.className = 'btn btn-danger btn-sm';
+  deleteBtn.textContent = 'Delete';
+  deleteBtn.onclick = () => deleteTask(task._id);
+  
+  taskDiv.appendChild(checkbox);
+  taskDiv.appendChild(taskText);
+  taskDiv.appendChild(deleteBtn);
   
   return taskDiv;
 }
@@ -146,18 +142,6 @@ async function deleteTask(id) {
     console.error('Error deleting task:', error);
     alert('Failed to delete task. Please try again.');
   }
-}
-
-// Escape HTML to prevent XSS
-function escapeHtml(text) {
-  const map = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#039;'
-  };
-  return text.replace(/[&<>"']/g, m => map[m]);
 }
 
 // Load tasks when page loads
