@@ -1,20 +1,18 @@
 {
-  "name": "personal-task-tracker",
+  "name": "todo-list",
   "version": "1.0.0",
-  "description": "A simple task tracker with JWT authentication",
+  "description": "Simple Todo List App",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
-  "keywords": ["todo", "task", "tracker", "jwt", "mongodb"],
+  "keywords": ["todo", "task", "mongodb"],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2",
     "mongoose": "^7.5.0",
-    "bcryptjs": "^2.4.3",
-    "jsonwebtoken": "^9.0.2",
     "dotenv": "^16.3.1",
     "cors": "^2.8.5"
   },
@@ -22,4 +20,3 @@
     "nodemon": "^3.0.1"
   }
 }
-
