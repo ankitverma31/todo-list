@@ -4,17 +4,17 @@ const Task = require('../models/Task');
 const router = express.Router();
 
 // Get all tasks
-router.get('/', async (req, res) => {
+async function getAllTasks(req, res) {
   try {
     const tasks = await Task.find().sort({ createdAt: -1 });
     res.json({ success: true, tasks });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Error fetching tasks' });
   }
-});
+}
 
 // Create new task
-router.post('/', async (req, res) => {
+async function createTask(req, res) {
   try {
     const { title } = req.body;
     
@@ -29,10 +29,10 @@ router.post('/', async (req, res) => {
   } catch (error) {
     res.status(500).json({ success: false, message: 'Error creating task' });
   }
-});
+}
 
 // Toggle task completion
-router.patch('/:id', async (req, res) => {
+async function toggleTaskCompletion(req, res) {
   try {
     const task = await Task.findById(req.params.id);
     
@@ -47,10 +47,10 @@ router.patch('/:id', async (req, res) => {
   } catch (error) {
     res.status(500).json({ success: false, message: 'Error updating task' });
   }
-});
+}
 
 // Delete task
-router.delete('/:id', async (req, res) => {
+async function deleteTask(req, res) {
   try {
     const task = await Task.findByIdAndDelete(req.params.id);
     
@@ -62,6 +62,12 @@ router.delete('/:id', async (req, res) => {
   } catch (error) {
     res.status(500).json({ success: false, message: 'Error deleting task' });
   }
-});
+}
+
+// Register routes
+router.get('/', getAllTasks);
+router.post('/', createTask);
+router.patch('/:id', toggleTaskCompletion);
+router.delete('/:id', deleteTask);
 
 module.exports = router;
