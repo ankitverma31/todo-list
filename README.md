@@ -86,10 +86,11 @@ Create `.env` file in root directory:
 
 ```env
 MONGODB_URI=mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/todolist?retryWrites=true&w=majority
-PORT=3000
 ```
 
 Replace `username` and `password` with your MongoDB credentials.
+
+Note: The server will run on port 3000 by default. To use a different port, add `PORT=3001` to your .env file.
 
 ### Step 8: Create Database Model
 
@@ -522,6 +523,9 @@ git push -u origin main
 5. Click "Advanced" and add Environment Variable:
    - **Key:** `MONGODB_URI`
    - **Value:** Your MongoDB Atlas connection string
+   
+   Note: You do NOT need to set PORT - Render automatically provides this
+   
 6. Click "Create Web Service"
 
 Render will automatically deploy your application. Once deployed, you'll receive a URL like: `https://your-app-name.onrender.com`
@@ -571,8 +575,8 @@ todo-list/
 - Ensure username and password are correct (no angle brackets)
 
 **Port Already in Use:**
-- Change PORT in .env to a different number (e.g., 3001)
-- Or kill the process: `lsof -ti:3000 | xargs kill -9` (Mac/Linux)
+- Add `PORT=3001` to your .env file to use a different port
+- Or kill the process using port 3000: `lsof -ti:3000 | xargs kill -9` (Mac/Linux)
 
 **Tasks Not Displaying:**
 - Open browser console (F12) to check for errors
