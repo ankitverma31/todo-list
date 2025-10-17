@@ -25,10 +25,12 @@ Before starting, ensure you have:
 Create project directory and initialize:
 
 ```bash
-mkdir todo-list
-cd todo-list
+mkdir todoapp
+cd todoapp
 npm init -y
 ```
+
+**What this does:** Creates a new directory for your project and initializes a Node.js project with a default `package.json` file that manages your project dependencies.
 
 ### Step 2: Install Dependencies
 
@@ -36,6 +38,13 @@ npm init -y
 npm install express mongoose cors dotenv
 npm install --save-dev nodemon
 ```
+
+**Dependencies explained:**
+- **express**: Fast, minimalist web framework for Node.js that handles routing, middleware, and HTTP requests
+- **mongoose**: MongoDB object modeling tool that provides schema-based solution to model your application data
+- **cors**: Cross-Origin Resource Sharing middleware that allows your frontend to communicate with your backend
+- **dotenv**: Loads environment variables from a `.env` file to keep sensitive data secure
+- **nodemon**: Development tool that automatically restarts your server when code changes are detected
 
 ### Step 3: Update package.json Scripts
 
@@ -47,6 +56,10 @@ Open `package.json` and update the scripts section:
   "dev": "nodemon server.js"
 }
 ```
+
+**Scripts explained:**
+- **start**: Production command to run the server using Node.js
+- **dev**: Development command that uses nodemon to automatically restart server on file changes
 
 ### Step 4: Create Project Structure
 
@@ -62,6 +75,14 @@ touch public/index.html
 touch public/js/app.js
 ```
 
+**Project structure explained:**
+- **models/**: Contains database schemas that define the structure of your data
+- **routes/**: Contains API endpoint definitions for handling HTTP requests
+- **public/**: Contains static files (HTML, CSS, JavaScript) served to the browser
+- **server.js**: Main application file that starts the Express server
+- **.env**: Stores environment variables like database connection strings
+- **.gitignore**: Specifies files that Git should ignore
+
 ### Step 5: Configure .gitignore
 
 Create `.gitignore` file:
@@ -72,7 +93,14 @@ node_modules/
 .DS_Store
 ```
 
+**Why we ignore these:**
+- **node_modules/**: Large folder containing all dependencies (can be reinstalled with `npm install`)
+- **.env**: Contains sensitive information like passwords and API keys
+- **.DS_Store**: macOS system file that should not be in version control
+
 ### Step 6: Setup MongoDB Atlas
+
+**What is MongoDB Atlas?** MongoDB Atlas is a cloud-based database service that hosts your MongoDB database. It's free to start and eliminates the need to install and maintain a local database.
 
 1. Go to https://www.mongodb.com/cloud/atlas
 2. Create a free account and sign in
@@ -91,6 +119,8 @@ MONGODB_URI=mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/todolist?
 ```
 
 Replace `username` and `password` with your MongoDB credentials.
+
+**What this does:** The `.env` file stores sensitive configuration data separate from your code. The `MONGODB_URI` is the connection string that tells your application where to find your database.
 
 Note: The server will run on port 3000 by default. To use a different port, add `PORT=3001` to your .env file.
 
@@ -117,6 +147,15 @@ const taskSchema = new mongoose.Schema({
 
 module.exports = mongoose.model('Task', taskSchema);
 ```
+
+**What is Mongoose?** Mongoose is an Object Data Modeling (ODM) library for MongoDB. It provides a schema-based solution to model your data, built-in validation, and query building.
+
+**Code explanation:**
+- **taskSchema**: Defines the structure of a task document in MongoDB
+- **title**: String field that's required and automatically trimmed of whitespace
+- **completed**: Boolean field that defaults to false for new tasks
+- **timestamps**: Automatically adds `createdAt` and `updatedAt` fields
+- **module.exports**: Makes the Task model available to other files
 
 ### Step 9: Create API Routes
 
@@ -192,6 +231,18 @@ router.delete('/:id', async (req, res) => {
 module.exports = router;
 ```
 
+**What are API Routes?** Routes define how your application responds to client requests at specific endpoints (URLs). These routes implement CRUD operations (Create, Read, Update, Delete).
+
+**Code explanation:**
+- **router.get('/')**: Fetches all tasks from database, sorted by creation date (newest first)
+- **router.post('/')**: Creates a new task with the provided title
+- **router.patch('/:id')**: Updates a specific task's completion status by its ID
+- **router.delete('/:id')**: Removes a specific task from the database by its ID
+- **async/await**: Handles asynchronous database operations
+- **try/catch**: Error handling to catch and respond to any errors
+- **res.json()**: Sends JSON response back to the client
+- **Status codes**: 200 (OK), 201 (Created), 400 (Bad Request), 404 (Not Found), 500 (Server Error)
+
 ### Step 10: Create Express Server
 
 Create `server.js`:
@@ -240,7 +291,20 @@ app.listen(PORT, () => {
 });
 ```
 
+**What is Express?** Express is a minimal and flexible Node.js web application framework that provides robust features for web and mobile applications.
+
+**Code explanation:**
+- **require('dotenv').config()**: Loads environment variables from .env file
+- **app.use(cors())**: Enables Cross-Origin Resource Sharing for frontend-backend communication
+- **app.use(express.json())**: Parses incoming JSON requests
+- **app.use(express.static())**: Serves static files (HTML, CSS, JavaScript) from the public folder
+- **mongoose.connect()**: Establishes connection to MongoDB database
+- **app.use('/api/tasks', taskRoutes)**: Mounts the task routes at /api/tasks endpoint
+- **app.listen()**: Starts the server and listens for incoming requests on specified port
+
 ### Step 11: Create HTML Frontend
+
+**What is Bootstrap?** Bootstrap is a popular CSS framework that provides pre-built components and responsive design utilities, making it easy to create beautiful web interfaces.
 
 Create `public/index.html`:
 
@@ -312,6 +376,13 @@ Create `public/index.html`:
 </body>
 </html>
 ```
+
+**HTML structure explained:**
+- **Bootstrap CDN**: Links to Bootstrap CSS and JavaScript for styling and components
+- **Bootstrap Icons**: Provides vector icons for visual enhancement
+- **Form**: Input field and button to add new tasks
+- **Stats Cards**: Display total tasks and completed tasks count
+- **Task List**: Container where tasks will be dynamically rendered by JavaScript
 
 ### Step 12: Create JavaScript Frontend Logic
 
@@ -468,6 +539,17 @@ async function deleteTask(id) {
 fetchTasks();
 ```
 
+**JavaScript functionality explained:**
+- **API_URL**: Defines the endpoint for making API requests
+- **fetchTasks()**: Makes a GET request to retrieve all tasks from the server
+- **displayTasks()**: Renders tasks in the HTML and updates statistics
+- **createTaskElement()**: Creates HTML elements for each task with checkbox and delete button
+- **addTaskForm.addEventListener()**: Handles form submission to create new tasks
+- **toggleTask()**: Sends PATCH request to toggle task completion status
+- **deleteTask()**: Sends DELETE request to remove a task
+- **async/await**: Handles asynchronous operations with the API
+- **fetch()**: Modern browser API for making HTTP requests
+
 ### Step 13: Run the Application
 
 Start the development server:
@@ -477,6 +559,8 @@ npm run dev
 ```
 
 The server will start on http://localhost:3000. Open this URL in your browser.
+
+**What happens when you run this?** Nodemon starts your Express server and watches for file changes. When you modify any file, it automatically restarts the server so you can see your changes immediately.
 
 ### Step 14: Test the Application
 
@@ -508,17 +592,29 @@ git init
 git add .
 git commit -m "Initial commit"
 git branch -M main
-git remote add origin https://github.com/yourusername/todo-list.git
+git remote add origin https://github.com/yourusername/todoapp.git
 git push -u origin main
 ```
 
+**What is Git?** Git is a version control system that tracks changes in your code. GitHub is a cloud-based platform that hosts your Git repositories, making it easy to collaborate and deploy applications.
+
+**Commands explained:**
+- **git init**: Initializes a new Git repository in your project
+- **git add .**: Stages all files for commit
+- **git commit -m**: Creates a snapshot of your code with a message
+- **git branch -M main**: Renames the default branch to "main"
+- **git remote add origin**: Links your local repository to GitHub
+- **git push -u origin main**: Uploads your code to GitHub
+
 ### Step 17: Deploy to Render
+
+**What is Render?** Render is a cloud platform that automatically builds and deploys your web applications from GitHub. It provides free hosting for small projects.
 
 1. Go to https://render.com and sign in with GitHub
 2. Click "New +" and select "Web Service"
 3. Connect your GitHub repository
 4. Configure the service:
-   - **Name:** todo-list (or your preferred name)
+   - **Name:** todoapp (or your preferred name)
    - **Environment:** Node
    - **Build Command:** `npm install`
    - **Start Command:** `npm start`
@@ -531,6 +627,12 @@ git push -u origin main
 6. Click "Create Web Service"
 
 Render will automatically deploy your application. Once deployed, you'll receive a URL like: `https://your-app-name.onrender.com`
+
+**Deployment process explained:**
+- Render clones your GitHub repository
+- Runs `npm install` to install dependencies
+- Executes `npm start` to run your server
+- Provides a public URL to access your application
 
 ### Step 18: Verify Deployment
 
@@ -545,7 +647,7 @@ Note: Free tier on Render may spin down after inactivity. The first request afte
 ## Project Structure
 
 ```
-todo-list/
+todoapp/
 ├── models/
 │   └── Task.js           # Mongoose schema for tasks
 ├── routes/
