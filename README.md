@@ -10,6 +10,8 @@ Before starting, ensure you have:
 
 - Node.js (v14 or higher) installed
 - MongoDB Atlas account (free tier available at https://www.mongodb.com/cloud/atlas)
+- Github account (https://github.com/signup)
+- Render account connected with Github - Deployment (https://render.com/) 
 - Code editor (VS Code recommended)
 - Basic knowledge of JavaScript, HTML, and CSS
 - Basic understanding of terminal/command line
